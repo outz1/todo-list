@@ -4,6 +4,7 @@ import Badge from "./components/badge";
 import Button from "./components/button";
 import ButtonIcon from "./components/button-icon";
 import InputCheckbox from "./components/input-checkbox";
+import Card from "./components/card";
 
 import TrashIcon from "./assets/icons/thrash.svg?react";
 import CheckIcon from "./assets/icons/checked.svg?react";
@@ -51,6 +52,11 @@ function App() {
       <div>
         <InputText />
         <InputCheckbox />
+      </div>
+      <div>
+        <Card size="md">
+          Hello World
+        </Card>
       </div>
     </div>
   );
