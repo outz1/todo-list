@@ -7,6 +7,8 @@ import InputCheckbox from "../components/input-checkbox";
 import ButtonIcon from "../components/button-icon";
 import { cx } from "class-variance-authority";
 import useTask from "../hooks/use-task";
+import Picker from "@emoji-mart/react";
+import data from "@emoji-mart/data";
 
 import TrashIcon from "../assets/icons/thrash.svg?react";
 import CheckIcon from "../assets/icons/checked.svg?react";
@@ -14,6 +16,7 @@ import PencilIcon from "../assets/icons/pencil.svg?react";
 import XIcon from "../assets/icons/x.svg?react";
 import InputText from "../components/input-text";
 import Skeleton from "../components/skeleton";
+import EmojiIcon from "../assets/icons/emoji.svg?react";
 
 interface TaskItemProps {
   loading?: boolean;
@@ -22,6 +25,10 @@ interface TaskItemProps {
 
 export default function TaskItem({ task, loading }: TaskItemProps) {
   const [isEditing, setIsEditing] = React.useState(task?.state === "creating");
+
+  const [showEmoji, setShowEmoji] = React.useState(false);
+
+  const [selectedEmoji, setSelectedEmoji] = React.useState<string | null>(null)
 
   const {
     updateTask,
@@ -76,6 +83,24 @@ export default function TaskItem({ task, loading }: TaskItemProps) {
             onChange={handleChangeStatus}
             loading={loading}
           />
+          <ButtonIcon
+            icon={selectedEmoji ? () => <span className="text-xl">{selectedEmoji}</span> : EmojiIcon}
+            variant={"tertiary"}
+            onClick={() => setShowEmoji((prev) => !prev)}
+          />
+          {showEmoji && (
+            <div className="absolute z-10">
+              <Picker
+                data={data}
+                onEmojiSelect={(emoji: any) => {
+                  setSelectedEmoji(emoji.native);
+                  setShowEmoji(false);
+                }}
+                theme="light"
+                previousPosition="none"
+              />
+            </div>
+          )}
           {!loading ? (
             <Text
               className={cx("flex-1", {
