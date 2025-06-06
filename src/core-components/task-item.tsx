@@ -38,7 +38,20 @@ export default function TaskItem({ task, loading }: TaskItemProps) {
     isDeletingTask,
   } = useTask();
 
+  React.useEffect(() => {
+    const savedEmoji = localStorage.getItem(`emoji-${task.id}`)
+    if (savedEmoji) {
+      setSelectedEmoji(savedEmoji)
+    }
+  }, [task.id])
+
   const [taskTitle, setTaskTitle] = React.useState(task.title || "");
+
+  function handleEmojiSelect(emoji: any) {
+    setSelectedEmoji(emoji.native)
+    localStorage.setItem(`emoji-${task.id}`, emoji.native)
+    setShowEmoji(false)
+  }
 
   function handleEditTask() {
     setIsEditing(true);
@@ -84,7 +97,7 @@ export default function TaskItem({ task, loading }: TaskItemProps) {
             loading={loading}
           />
           <ButtonIcon
-            icon={selectedEmoji ? () => <span className="text-xl">{selectedEmoji}</span> : EmojiIcon}
+            icon={selectedEmoji ? () => <span className="text-[20px] leading-none">{selectedEmoji}</span> : EmojiIcon}
             variant={"tertiary"}
             onClick={() => setShowEmoji((prev) => !prev)}
           />
@@ -92,10 +105,7 @@ export default function TaskItem({ task, loading }: TaskItemProps) {
             <div className="absolute z-10">
               <Picker
                 data={data}
-                onEmojiSelect={(emoji: any) => {
-                  setSelectedEmoji(emoji.native);
-                  setShowEmoji(false);
-                }}
+                onEmojiSelect={handleEmojiSelect}
                 theme="light"
                 previousPosition="none"
               />
